@@ -14,3 +14,9 @@ node_modules/
 supabase/.temp/
 .vercel
 .env*
+
+# demo recording (large binary)
+demo_video/
+
+# recorder session (logged-in Telegram)
+tg-profile/

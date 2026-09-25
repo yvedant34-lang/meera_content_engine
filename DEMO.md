@@ -41,3 +41,6 @@ Fixes deployed during the run (commits fc7d784, 5328a4a):
 3. Wider backstop: any reference to articles, commentary, experts or projections forces the verify block.
 
 Known limits: drafts today came mostly from `gemini-3.1-flash-lite` (free-tier quotas for 3.8/3.5-flash used up), about 60–95 s per note; small inventions ("Last week", "I have seen this many times") still need Meera's edit; one Americanism ("toward") slipped past the spelling check.
+
+## Recorded demo — 25 Sep, 15:31 IST (`demo_video/meera_bot_demo.mp4`, 53.8 s, not in git)
+Scripted with `tests/recording/`, live bot, real replies. Note 05 → draft with news source (EU anti-greenwashing directive, Personal Care Insights, 22 Sept 2026) + verify block + posting slot → feedback ("shorter, three paragraphs, end with a question") → REVISED DRAFT v2 (231 → 165 words, source kept) → APPROVE. Note 03 → draft (49/70/85 °C exact) → REJECT. Bot waits sped up and captioned. New in this build: feedback revisions (old versions kept as `revised`), Tue–Thu 8:30–9:30 IST posting-slot suggestion (general guidance, labelled as such), sharper news search + relevance gate.

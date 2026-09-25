@@ -23,3 +23,21 @@ Bot `@skinstinct_meera_notes_bot` · private channel "Meera Notes" (`-1004457260
 - The comparison ran on the free Gemini tier after the daily quotas for `gemini-3.8-flash` (20/day) and `gemini-3.5-flash` were used up, so both drafts fell back to `gemini-3.1-flash-lite`. The mechanism works; a meaningful quality comparison needs quota (tomorrow, or billing on AI Studio).
 - Drafts are review-ready, not publish-ready. Weak news items (market-size reports) still get used, and the verify block is the guard.
 - Production runs `DRAFT_MODEL_PROVIDER=gemini` (single draft) again after the demo.
+
+## Seed-note test run — Notes 02–05 (25 Sep, 14:50–15:05 IST)
+
+Each note was posted to the live channel and checked with `node tests/check_note.mjs "<first words>"` (10 rule checks per note) plus a human read of the draft.
+
+| Note | Score | Result | Checks | Human read |
+|---|---|---|---|---|
+| 02 Layering order | 9/10 | Drafted | 10/10 | **Bug found:** draft alluded to a news item ("Articles regarding…") while reporting it unused, so no verify block. Fixed (see below); re-run clean. |
+| 03 Cold-pressed sourcing | 9/10 | Drafted | 10/10 | Best draft. 49/70/85 °C kept exactly, her uncertainty kept. Minor: "Last week" invented for "recently". |
+| 04 Barrier types | 8/10 | Drafted | 10/10 | Faithful, adds nothing. Scored higher than expected for a trailing note; defensible, as the angle is clear. |
+| 05 Clean beauty | 8/10 | Drafted | 10/10 | **Bug found:** market-size press release used as "news" filler. Fixed; re-run clean. Note: Meera says she has no new angle yet, and the scorer does not weigh that. |
+
+Fixes deployed during the run (commits fc7d784, 5328a4a):
+1. News filter: scan the top 10 Google News items, skip market-research releases, listicles and wire services.
+2. Relevance gate: Gemini flash-lite judges whether the news can be cited as evidence for the note's exact point (4/4 on labelled cases); irrelevant news never reaches the drafting model.
+3. Wider backstop: any reference to articles, commentary, experts or projections forces the verify block.
+
+Known limits: drafts today came mostly from `gemini-3.1-flash-lite` (free-tier quotas for 3.8/3.5-flash used up), about 60–95 s per note; small inventions ("Last week", "I have seen this many times") still need Meera's edit; one Americanism ("toward") slipped past the spelling check.

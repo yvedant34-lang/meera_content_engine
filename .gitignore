@@ -1,0 +1,11 @@
+# secrets: never commit
+.env
+.env.local
+.env.*
+!.env.example
+KEYS.md
+
+# dependencies and build output
+node_modules/
+.vercel/
+.DS_Store

@@ -13,8 +13,8 @@ Telegram note → `/api/webhook` (Vercel, answers Telegram at once) → Gemini F
 | `api/webhook.js` | The only serverless function: checks the secret header and chat id, replies 200 at once, then runs the pipeline in the background. |
 | `lib/pipeline.js` | The whole flow: dedupe, score, news, draft, send, save; plus APPROVE/REJECT, voice-note refusal and loop guards. |
 | `lib/prompts.js` | Every prompt the models see: scoring rubric, keyword extraction, drafting rules, the verify block. |
-| `lib/gemini.js` | Calls Gemini with retries and a fallback model chain when a model is overloaded or out of quota. |
-| `lib/anthropic.js` | Calls Claude (`claude-opus-5`) for drafting from B1. |
+| `lib/gemini.js` | Calls Gemini (scoring/keywords on 3.1-flash-lite, drafts on 3.8-flash) with a fallback chain when a model is overloaded or out of quota. |
+| `lib/anthropic.js` | Optional: calls Claude (`claude-opus-5`) only if ANTHROPIC_API_KEY is set; otherwise all drafting stays on Gemini. |
 | `lib/news.js` | Fetches and parses the top Google News RSS result. No key. |
 | `lib/db.js` | Reads and writes Supabase over REST with the server key. Never deletes. |
 | `lib/telegram.js` | Sends plain-text messages and splits long drafts at paragraph breaks under 4,096 chars. |

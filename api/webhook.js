@@ -1,6 +1,7 @@
-// /api/webhook — Telegram entry point.
-// Phase 0: security gate only (secret header + chat id). Pipeline arrives at L3·2.
+// /api/webhook — the single Vercel function. Security gate, fast 200, pipeline runs after the reply.
 import { timingSafeEqual } from 'node:crypto';
+import { waitUntil } from '@vercel/functions';
+import { processUpdate } from '../lib/pipeline.js';
 
 function secretOk(got) {
   const want = process.env.TELEGRAM_WEBHOOK_SECRET || '';
@@ -20,14 +21,18 @@ export default async function handler(req, res) {
 
   const update = req.body || {};
   const msg = update.channel_post || update.message;
-  const chatId = msg?.chat?.id;
 
-  // Constraint 4: only Meera's chat. Return 200 so Telegram does not retry.
-  if (String(chatId) !== String(process.env.TELEGRAM_CHAT_ID)) {
-    console.log(`ignored update ${update.update_id}: foreign chat`);
-    return res.status(200).json({ ok: true, ignored: 'chat' });
+  // Constraint 4: only Meera's chat. 200 so Telegram does not retry foreign updates.
+  if (!msg || String(msg.chat?.id) !== String(process.env.TELEGRAM_CHAT_ID)) {
+    return res.status(200).json({ ok: true, ignored: true });
   }
 
-  console.log(`received update ${update.update_id} (${update.channel_post ? 'channel_post' : 'message'})`);
+  // Constraint 5: answer Telegram immediately so it never retries a slow run.
+  // The pipeline keeps running after the response (up to maxDuration in vercel.json).
+  waitUntil(
+    processUpdate(update)
+      .then((r) => console.log(`update ${update.update_id}: ${r}`))
+      .catch((e) => console.error(`update ${update.update_id} crashed:`, e))
+  );
   return res.status(200).json({ ok: true });
 }

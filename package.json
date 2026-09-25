@@ -3,8 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "engines": { "node": "22.x" },
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
-    "set-webhook": "node scripts/set_webhook.mjs"
+    "set-webhook": "node scripts/set_webhook.mjs",
+    "seed-voice": "node scripts/seed_voice.mjs",
+    "test": "node tests/run_local.mjs",
+    "fact-check": "node tests/fact_check.mjs"
+  },
+  "dependencies": {
+    "@vercel/functions": "^3.9.9"
   }
 }

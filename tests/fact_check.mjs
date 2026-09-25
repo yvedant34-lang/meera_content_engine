@@ -7,14 +7,7 @@ for (const l of readFileSync(new URL('../.env', import.meta.url), 'utf8').split(
 }
 process.env.TELEGRAM_CHAT_ID = '-100999000';
 process.env.DRAFT_MODEL_PROVIDER = process.argv[2] || 'gemini';
-// Same test-only stand-in as run_local.mjs when voice-skill.txt is absent.
-process.env.__TEST_VOICE = `TEST STAND-IN (from CLAUDE.md, not the real voice skill).
-Opens on a concrete claim or scene: "Last September I was at a trade fair in Mumbai."
-States limits plainly: "I'm not a dermatologist. I don't have a medical degree."
-Uses her own data with exact numbers: returns from humid cities "dropped to 8% in the following quarter."
-Ends on an action for the reader, not a slogan: "You should ask for them."
-First person, evidence led, calm and exact. Admits what she does not know. No hype, no emojis, no hashtags.
-Paragraphs of 3 to 5 sentences.`;
+// Uses the live voice: Supabase active row, else voice-skill.txt.
 
 const sent = [];
 globalThis.__tgMock = async (m, b) => { sent.push(b.text); return { ok: true, result: { message_id: 900000000 + sent.length } }; };

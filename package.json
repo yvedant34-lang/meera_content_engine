@@ -1,0 +1,10 @@
+{
+  "name": "meera_content_engine",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": "22.x" },
+  "scripts": {
+    "set-webhook": "node scripts/set_webhook.mjs"
+  }
+}

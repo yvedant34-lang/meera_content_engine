@@ -9,3 +9,6 @@ KEYS.md
 node_modules/
 .vercel/
 .DS_Store
+
+# supabase cli cache
+supabase/.temp/
